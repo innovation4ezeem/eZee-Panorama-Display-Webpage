@@ -72,12 +72,11 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
 .vbar h3{font:400 1.25rem var(--serif);margin:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vbar .note{font-size:.85rem;color:#C9D6D1}
 .vbar .btn{flex:0 0 auto;color:#F4F1E8;border-color:#3D6158}
-.vbar .btn.preview{background:var(--brass);border-color:var(--brass);color:#17211E}
 .vscroll{flex:1;overflow:auto;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
 .vscroll img{margin:0 auto;max-width:1200px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.4)}
 .vempty{max-width:46ch;margin:12vh auto;color:#DCE4E1;text-align:center}
 .vempty code{background:#1B4C43;padding:2px 6px;border-radius:3px}
-@media (max-width:560px){.vbar .note{display:none}.vbar{gap:8px}.vbar .btn{padding:9px 10px}.filters button{padding:9px 12px;font-size:.88rem}}
+@media (max-width:560px){.vbar .note{display:none}.filters button{padding:9px 12px;font-size:.88rem}}
 @media (prefers-reduced-motion:no-preference){.card .shot img{transition:transform .5s ease}.card:hover .shot img{transform:scale(1.02)}}
 </style>
 </head>
@@ -106,7 +105,6 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
   <div class="vbar">
     <h3 id="v-title"></h3>
     <span class="note">Screenshot</span>
-    <a class="btn preview" id="v-preview" target="_blank" title="Browse the saved offline version of this website">Preview</a>
     <a class="btn" id="v-live" target="_blank" rel="noopener">Open live site</a>
     <button class="btn" id="v-close" type="button">Close</button>
   </div>
@@ -181,9 +179,6 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
     lastFocus = document.activeElement;
     document.getElementById('v-title').textContent = s.name;
     document.getElementById('v-live').href = s.url;
-    var preview = document.getElementById('v-preview');
-    preview.hidden = !s.offline;
-    if (s.offline) preview.href = encodeURI(s.offline);
     vBody.innerHTML = '<img alt="Saved home page of '+esc(s.name)+'" src="thumbnails/'+s.slug+'-full.jpg">';
     vBody.querySelector('img').addEventListener('error', function(){
       vBody.innerHTML = '<div class="vempty"><p>No saved copy for '+esc(s.name)+' yet.</p><p>Run <code>python capture.py '+s.slug+'</code> and add the images in the thumbnails folder.</p></div>';
