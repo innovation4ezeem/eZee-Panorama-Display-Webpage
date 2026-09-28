@@ -24,7 +24,7 @@ The included workflow re-captures every Monday and commits fresh images, so the 
 
 ## Backup sites (when eweb247.com is down)
 
-`Single Properties/` and `Group Properties/` hold saved copies of each site's main pages (SingleFile snapshots, images included). Each card's **Backup site** button opens them, and it becomes the main button when the live site isn't responding.
+`Single Properties/` and `Group Properties/` hold saved copies of each site's main pages (SingleFile snapshots, images included). Each card's **Offline copy** button opens them, and it becomes the main button when the live site isn't responding.
 
 - **One link per property:** `go.html?hotelzara` opens the live site if it answers within 5 seconds, otherwise the backup. `go.html?hotelzara&backup` always opens the backup. Slugs are in `sites.js`.
 - **After adding or re-saving pages**, run `python offline_links.py`. It points the menu links inside the saved pages at each other instead of eweb247.com, and it's safe to run repeatedly. Links to pages that weren't saved (FAQs, blogs, policies, room detail) open `offline-missing.html`, which offers the live link; the script lists them so you can save any that matter.
@@ -36,6 +36,6 @@ Edit `sites.js` only. Both the page and the capture script read from it. Set `"o
 
 ## Worth knowing
 
-- Screenshots (click a card's thumbnail) are images of the home page only. The backup sites are clickable, but booking engines and forms still need the live site.
+- Screenshots (click a card's thumbnail) are images of the home page only. The offline copies are clickable, but booking engines and forms still need the live site.
 - The backup folders are ~340 MB. That's fine for GitHub and Pages (no single file is near the 100 MB limit), but the first push takes a while.
 - A **private** repo needs a paid GitHub plan for Pages. On a free plan the Pages URL is public — the page is set to `noindex`, so search engines won't list it, but anyone with the link can open it.

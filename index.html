@@ -84,7 +84,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
 <header class="lobby">
   <div class="wrap">
     <h1>Hotel websites we’ve built</h1>
-    <p>Every live demo in one place. If a site won’t load in front of a client, open its backup instead — a saved copy of the real pages, served from here, that works without the main server.</p>
+    <p>Every live demo in one place. If a site won’t load in front of a client, open its offline copy instead — a saved copy of the real pages, served from here, that works without the main server.</p>
     <div class="bar">
       <div class="filters" role="group" aria-label="Filter properties">
         <button type="button" data-filter="all" aria-pressed="true">All<span id="n-all"></span></button>
@@ -98,7 +98,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
 
 <main class="wrap">
   <div class="grid" id="grid"></div>
-  <footer>Backup sites are saved copies of each property’s main pages, and you can click between them. Booking engines, forms and pages that weren’t saved need the live site. Click a thumbnail to see a full-page screenshot.</footer>
+  <footer>Offline copies are saved copies of each property’s main pages, and you can click between them. Booking engines, forms and pages that weren’t saved need the live site. Click a thumbnail to see a full-page screenshot.</footer>
 </main>
 
 <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="v-title">
@@ -136,7 +136,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
       '<div class="body"><div class="head"><h2>'+esc(s.name)+'</h2><span class="kind">'+TYPE[s.type]+'</span></div>'+
       '<div class="status"><i></i><span>Checking…</span></div>'+
       '<div class="actions"><a class="btn primary live" href="'+esc(s.url)+'" target="_blank" rel="noopener">Live site</a>'+
-      (s.offline ? '<a class="btn copy" href="'+esc(encodeURI(s.offline))+'" target="_blank">Backup site</a>'
+      (s.offline ? '<a class="btn copy" href="'+esc(encodeURI(s.offline))+'" target="_blank">Offline copy</a>'
                  : '<button class="btn copy" type="button">Saved copy</button>')+'</div></div>';
     el.querySelector('img').addEventListener('error', function(){ el.classList.add('no-shot') });
     el.querySelector('.shot').addEventListener('click', function(){ openViewer(s) });
@@ -164,7 +164,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
   });
   function mark(card, ok){
     card.dataset.state = ok ? 'live' : 'down';
-    card.querySelector('.status span').textContent = ok ? 'Online' : 'Not responding — use the backup site';
+    card.querySelector('.status span').textContent = ok ? 'Online' : 'Not responding — use the offline copy';
     var liveBtn = card.querySelector('.live'), copyBtn = card.querySelector('.copy');
     liveBtn.classList.toggle('primary', ok); copyBtn.classList.toggle('primary', !ok);
     ok ? live++ : down++; done++;
