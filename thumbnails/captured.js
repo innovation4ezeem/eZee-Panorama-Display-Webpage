@@ -1,0 +1,1 @@
+window.CAPTURED_AT = "28 Sep 2026, 01:30 UTC";
