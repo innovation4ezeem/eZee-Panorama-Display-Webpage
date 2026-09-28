@@ -46,6 +46,7 @@ main{padding-bottom:64px}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
 .shot{position:relative;aspect-ratio:16/10;background:var(--lobby-2);overflow:hidden;border-bottom:1px solid var(--line)}
 .shot img{width:100%;height:100%;object-fit:cover;object-position:top}
+button.shot{display:block;width:100%;padding:0;border:0;border-bottom:1px solid var(--line);cursor:zoom-in;font:inherit}
 .shot .ph{position:absolute;inset:0;display:none;align-content:center;justify-items:center;gap:6px;text-align:center;padding:16px;color:#E6DCC6;font:400 1.05rem/1.3 var(--sans)}
 .shot .ph small{font-size:.8rem;color:#9FB3AC}
 .card.no-shot .shot img{display:none}.card.no-shot .ph{display:grid}
@@ -83,7 +84,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
 <header class="lobby">
   <div class="wrap">
     <h1>Hotel websites we’ve built</h1>
-    <p>Every live demo in one place. If a site won’t load in front of a client, open its saved copy instead — it looks the same and works without the main server.</p>
+    <p>Every live demo in one place. If a site won’t load in front of a client, open its backup instead — a saved copy of the real pages, served from here, that works without the main server.</p>
     <div class="bar">
       <div class="filters" role="group" aria-label="Filter properties">
         <button type="button" data-filter="all" aria-pressed="true">All<span id="n-all"></span></button>
@@ -97,13 +98,13 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
 
 <main class="wrap">
   <div class="grid" id="grid"></div>
-  <footer>Saved copies show each home page as it looked on the capture date. Links, forms and booking engines only work on the live site.</footer>
+  <footer>Backup sites are saved copies of each property’s main pages, and you can click between them. Booking engines, forms and pages that weren’t saved need the live site. Click a thumbnail to see a full-page screenshot.</footer>
 </main>
 
 <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="v-title">
   <div class="vbar">
     <h3 id="v-title"></h3>
-    <span class="note">Saved copy</span>
+    <span class="note">Screenshot</span>
     <a class="btn" id="v-live" target="_blank" rel="noopener">Open live site</a>
     <button class="btn" id="v-close" type="button">Close</button>
   </div>
@@ -130,14 +131,16 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
     var el = document.createElement('article');
     el.className = 'card'; el.dataset.type = s.type; el.dataset.slug = s.slug;
     el.innerHTML =
-      '<div class="shot"><img loading="lazy" alt="Home page of '+esc(s.name)+'" src="thumbnails/'+s.slug+'.jpg">'+
-      '<div class="ph">'+esc(s.url.replace(/^https?:\/\//,'').replace(/\/$/,''))+'<small>Preview not captured yet</small></div></div>'+
+      '<button class="shot" type="button" aria-label="Full-page screenshot of '+esc(s.name)+'"><img loading="lazy" alt="" src="thumbnails/'+s.slug+'.jpg">'+
+      '<div class="ph">'+esc(s.url.replace(/^https?:\/\//,'').replace(/\/$/,''))+'<small>Preview not captured yet</small></div></button>'+
       '<div class="body"><div class="head"><h2>'+esc(s.name)+'</h2><span class="kind">'+TYPE[s.type]+'</span></div>'+
       '<div class="status"><i></i><span>Checking…</span></div>'+
       '<div class="actions"><a class="btn primary live" href="'+esc(s.url)+'" target="_blank" rel="noopener">Live site</a>'+
-      '<button class="btn copy" type="button">Saved copy</button></div></div>';
+      (s.offline ? '<a class="btn copy" href="'+esc(encodeURI(s.offline))+'" target="_blank">Backup site</a>'
+                 : '<button class="btn copy" type="button">Saved copy</button>')+'</div></div>';
     el.querySelector('img').addEventListener('error', function(){ el.classList.add('no-shot') });
-    el.querySelector('.copy').addEventListener('click', function(){ openViewer(s) });
+    el.querySelector('.shot').addEventListener('click', function(){ openViewer(s) });
+    if (!s.offline) el.querySelector('.copy').addEventListener('click', function(){ openViewer(s) });
     grid.appendChild(el);
   });
 
@@ -161,7 +164,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
   });
   function mark(card, ok){
     card.dataset.state = ok ? 'live' : 'down';
-    card.querySelector('.status span').textContent = ok ? 'Online' : 'Not responding — use the saved copy';
+    card.querySelector('.status span').textContent = ok ? 'Online' : 'Not responding — use the backup site';
     var liveBtn = card.querySelector('.live'), copyBtn = card.querySelector('.copy');
     liveBtn.classList.toggle('primary', ok); copyBtn.classList.toggle('primary', !ok);
     ok ? live++ : down++; done++;

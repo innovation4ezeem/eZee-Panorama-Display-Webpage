@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page not in saved copy</title>
+<style>
+:root{--lobby:#123B34;--linen:#F2F4F1;--paper:#FFFFFF;--brass:#B98A3E;--ink:#17211E;--mute:#5E6A65;--line:#D9DED9;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--linen:#101614;--paper:#18201D;--ink:#E7ECE9;--mute:#9AA7A1;--line:#2A3531;--lobby:#0E2E28}}
+:root[data-theme="dark"]{--linen:#101614;--paper:#18201D;--ink:#E7ECE9;--mute:#9AA7A1;--line:#2A3531;--lobby:#0E2E28}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:var(--linen);color:var(--ink);font:16px/1.55 var(--sans)}
+.box{max-width:30rem;background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--brass);border-radius:6px;padding:28px 24px}
+h1{font:400 1.6rem/1.2 var(--serif);margin:0 0 10px}
+p{margin:0 0 18px;color:var(--mute)}
+code{word-break:break-all;font-size:.85rem}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{flex:1;text-align:center;text-decoration:none;font:600 .9rem var(--sans);padding:10px 12px;border-radius:4px;border:1px solid var(--line);color:var(--ink);background:transparent;cursor:pointer}
+.btn.primary{background:var(--lobby);border-color:var(--lobby);color:#F4F1E8}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>This page isn’t in the saved copy</h1>
+  <p>Only the main pages of each site were saved for offline use. This one is available on the live site: <code id="url"></code></p>
+  <div class="actions">
+    <button class="btn primary" type="button" onclick="history.length > 1 ? history.back() : location.href = 'index.html'">Go back</button>
+    <a class="btn" id="live" rel="noopener">Try the live page</a>
+    <a class="btn" href="index.html">All properties</a>
+  </div>
+</div>
+<script>
+  var u = decodeURIComponent(location.hash.slice(1));
+  if (/^https:\/\/(www\.)?eweb247\.com\//i.test(u)) {
+    document.getElementById('url').textContent = u;
+    document.getElementById('live').href = u;
+  } else {
+    document.getElementById('live').hidden = true;
+    document.getElementById('url').textContent = '(unknown page)';
+  }
+</script>
+</body>
+</html>

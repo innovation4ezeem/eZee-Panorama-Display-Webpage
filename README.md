@@ -22,11 +22,20 @@ This fills `thumbnails/` with `<slug>.jpg` (card preview) and `<slug>-full.jpg` 
 
 The included workflow re-captures every Monday and commits fresh images, so the backup stays current. Run it anytime from the **Actions** tab → *Refresh backup screenshots* → *Run workflow*. (If you skip step 1, running this workflow once does the first capture for you.)
 
+## Backup sites (when eweb247.com is down)
+
+`Single Properties/` and `Group Properties/` hold saved copies of each site's main pages (SingleFile snapshots, images included). Each card's **Backup site** button opens them, and it becomes the main button when the live site isn't responding.
+
+- **One link per property:** `go.html?hotelzara` opens the live site if it answers within 5 seconds, otherwise the backup. `go.html?hotelzara&backup` always opens the backup. Slugs are in `sites.js`.
+- **After adding or re-saving pages**, run `python offline_links.py`. It points the menu links inside the saved pages at each other instead of eweb247.com, and it's safe to run repeatedly. Links to pages that weren't saved (FAQs, blogs, policies, room detail) open `offline-missing.html`, which offers the live link; the script lists them so you can save any that matter.
+- Name the folder anything; the script identifies the site from the `url:` line SingleFile writes at the top of each file.
+
 ## Adding or removing a property
 
-Edit `sites.js` only. Both the page and the capture script read from it.
+Edit `sites.js` only. Both the page and the capture script read from it. Set `"offline"` to the saved home page if there is one.
 
 ## Worth knowing
 
-- Saved copies are images of the home page, not clickable websites. Good for showing design; booking engines and inner pages need the live site.
+- Screenshots (click a card's thumbnail) are images of the home page only. The backup sites are clickable, but booking engines and forms still need the live site.
+- The backup folders are ~340 MB. That's fine for GitHub and Pages (no single file is near the 100 MB limit), but the first push takes a while.
 - A **private** repo needs a paid GitHub plan for Pages. On a free plan the Pages URL is public — the page is set to `noindex`, so search engines won't list it, but anyone with the link can open it.
