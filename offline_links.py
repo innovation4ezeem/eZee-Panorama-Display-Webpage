@@ -12,6 +12,10 @@ What it does, for every <a href="https://eweb247.com/<site>/<page>"> in
   - the page is saved       -> relative link to the saved file (works across sites too)
   - the page wasn't saved   -> offline-missing.html, which explains and offers the live link
 Links to other domains (booking engine, maps, social) and to images/files are left alone.
+
+It also adds a small <style id=offline-fix> to each page: the sites fade sections in with
+scroll-animation scripts (AOS), which SingleFile doesn't keep, so without it those sections
+stay invisible. The style shows them in their finished state.
 """
 import os, re
 from collections import Counter
@@ -27,6 +31,11 @@ A_TAG = re.compile(r"<a\b[^>]*>", re.I)
 HREF = re.compile(r"""(\bhref\s*=\s*)("([^"]*)"|'([^']*)'|([^\s>"']+))""", re.I)
 SAVED_FROM = re.compile(r"url: (\S+)")
 ASSET = re.compile(r"\.(jpe?g|png|gif|webp|svg|pdf|mp4|webm)$", re.I)  # lightbox/download links, not pages
+FIX_ID = "offline-fix"
+FIX_CSS = (f'<style id={FIX_ID}>'
+           '[data-aos]{opacity:1!important;transform:none!important;visibility:visible!important}'
+           '</style>')
+CHARSET = re.compile(r"<meta charset=[^>]*>", re.I)
 
 
 def page_key(name):
@@ -88,6 +97,11 @@ def rewrite(path, sites, stats):
         return f'{m.group(1)}"{new}"'
 
     new_text = A_TAG.sub(lambda t: HREF.sub(fix_href, t.group(0)), text)
+    if f"id={FIX_ID}" not in new_text:
+        m = CHARSET.search(new_text)
+        at = m.end() if m else 0
+        new_text = new_text[:at] + FIX_CSS + new_text[at:]
+        stats["styled"] += 1
     if new_text != text:
         path.write_text(new_text, encoding="utf-8", errors="surrogateescape", newline="")
         stats["files"] += 1
@@ -96,12 +110,12 @@ def rewrite(path, sites, stats):
 def main():
     sites = build_index()
     print(f"Found {len(sites)} saved sites: {', '.join(sorted(sites))}")
-    stats = {"files": 0, "linked": 0, "missing": 0, "missing_pages": Counter()}
+    stats = {"files": 0, "linked": 0, "missing": 0, "styled": 0, "missing_pages": Counter()}
     for pages in sites.values():
         for f in sorted(set(pages.values())):
             rewrite(f, sites, stats)
     print(f"Updated {stats['files']} files: {stats['linked']} links now go to saved pages, "
-          f"{stats['missing']} go to the 'not saved' notice.")
+          f"{stats['missing']} go to the 'not saved' notice, {stats['styled']} pages got the animation fix.")
     if stats["missing_pages"]:
         print("\nPages linked to but not saved (save them into the folder and re-run to include):")
         for url, n in sorted(stats["missing_pages"].items()):
