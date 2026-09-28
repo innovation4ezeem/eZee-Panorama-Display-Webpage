@@ -29,6 +29,7 @@ The included workflow re-captures every Monday and commits fresh images, so the 
 - **One link per property:** `go.html?hotelzara` opens the live site if it answers within 5 seconds, otherwise the backup. `go.html?hotelzara&backup` always opens the backup. Slugs are in `sites.js`.
 - **After adding or re-saving pages**, run `python offline_links.py`. It points the menu links inside the saved pages at each other instead of eweb247.com, and it's safe to run repeatedly. Links to pages that weren't saved (FAQs, blogs, policies, room detail) open `offline-missing.html`, which offers the live link; the script lists them so you can save any that matter.
 - Name the folder anything; the script identifies the site from the `url:` line SingleFile writes at the top of each file.
+- **Save pages at desktop width with "remove hidden elements" turned off**, or menus, dropdowns and slider captions go missing. From the command line: `npx single-file-cli <url> <file> --browser-width=1440 --browser-height=900 --remove-hidden-elements=false` (add `--browser-executable-path` pointing at Chrome or Edge if needed).
 
 ## Adding or removing a property
 
