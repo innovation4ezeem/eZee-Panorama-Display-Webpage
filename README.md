@@ -20,7 +20,7 @@ This fills `thumbnails/` with `<slug>.jpg` (card preview) and `<slug>-full.jpg` 
 2. Settings → Pages → Source: *Deploy from a branch* → `main` / root → Save.
 3. The page appears at `https://<your-account>.github.io/<repo-name>/` within a minute or two.
 
-The included workflow re-captures every Monday and commits fresh images, so the backup stays current. Run it anytime from the **Actions** tab → *Refresh backup screenshots* → *Run workflow*. (If you skip step 1, running this workflow once does the first capture for you.)
+To refresh the thumbnails, run `python capture.py` on your own computer and push the `thumbnails/` folder. Don't rely on the GitHub workflow (*Actions* → *Refresh backup screenshots*): eweb247.com blocks GitHub's servers with a "403 ERROR / Request blocked" page, so it's manual-only now, and `capture.py` keeps the old image instead of saving an error page.
 
 ## Backup sites (when eweb247.com is down)
 

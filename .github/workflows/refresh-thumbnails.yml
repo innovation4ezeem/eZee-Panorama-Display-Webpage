@@ -1,8 +1,9 @@
 name: Refresh backup screenshots
 
+# Manual only. eweb247.com's CloudFront blocks GitHub's servers ("403 ERROR / Request blocked"),
+# so a scheduled run here can't reach the sites. Run `python capture.py` on a normal computer
+# instead; capture.py now refuses to save error pages either way.
 on:
-  schedule:
-    - cron: "0 3 * * 1" # every Monday at 03:00 UTC
   workflow_dispatch: {}
 
 permissions:

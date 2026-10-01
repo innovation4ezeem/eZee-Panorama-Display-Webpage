@@ -23,6 +23,7 @@ ROOT = Path(__file__).parent
 OUT = ROOT / "thumbnails"
 VIEWPORT = {"width": 1440, "height": 900}
 FULL_MAX_HEIGHT = 12000  # px; very long pages are cropped so files stay small
+BLOCKED = re.compile(r"403 ERROR|Request blocked|The request could not be satisfied|Access Denied", re.I)
 
 
 def load_sites():
@@ -62,11 +63,15 @@ def main():
             print(f"-> {s['name']:<24} {s['url']}", flush=True)
             page = ctx.new_page()
             try:
-                page.goto(s["url"], wait_until="domcontentloaded", timeout=60000)
+                resp = page.goto(s["url"], wait_until="domcontentloaded", timeout=60000)
                 try:
                     page.wait_for_load_state("networkidle", timeout=20000)
                 except Exception:
                     pass  # some sites never go idle (chat widgets, trackers)
+                # Never overwrite a good image with an error page (eweb247's CloudFront
+                # returns "403 ERROR / Request blocked" to data-centre IPs such as GitHub Actions).
+                if resp is None or resp.status >= 400 or BLOCKED.search(page.inner_text("body")[:2000]):
+                    raise RuntimeError(f"site returned an error page (HTTP {resp.status if resp else '?'}); kept the old image")
                 settle(page)
                 save_jpg(page.screenshot(), OUT / f"{s['slug']}.jpg", width=720, quality=80)
                 save_jpg(page.screenshot(full_page=True), OUT / f"{s['slug']}-full.jpg",
@@ -79,8 +84,9 @@ def main():
                 page.close()
         browser.close()
     # Written as a .js file so the page can read it even when opened from disk.
-    stamp = time.strftime("%d %b %Y, %H:%M UTC", time.gmtime())
-    (OUT / "captured.js").write_text(f'window.CAPTURED_AT = "{stamp}";\n', encoding="utf-8")
+    if len(failed) < len(sites):
+        stamp = time.strftime("%d %b %Y, %H:%M UTC", time.gmtime())
+        (OUT / "captured.js").write_text(f'window.CAPTURED_AT = "{stamp}";\n', encoding="utf-8")
     print(f"\nDone. {len(sites) - len(failed)} saved, {len(failed)} failed {failed or ''}")
 
 

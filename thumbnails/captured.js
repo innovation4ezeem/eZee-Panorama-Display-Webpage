@@ -1,1 +1,1 @@
-window.CAPTURED_AT = "28 Sep 2026, 09:08 UTC";
+window.CAPTURED_AT = "28 Sep 2026, 01:30 UTC";
