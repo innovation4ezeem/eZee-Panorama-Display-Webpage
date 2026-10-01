@@ -118,6 +118,8 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
   var SITES = window.SITES || [];
   var grid = document.getElementById('grid');
   var TYPE = {single:'Single property', group:'Hotel group'};
+  // Tie image URLs to the capture date so browsers never reuse an older (or broken) screenshot.
+  var V = '?v=' + encodeURIComponent(window.CAPTURED_AT || '');
 
   ['all','single','group'].forEach(function(k){
     var n = k === 'all' ? SITES.length : SITES.filter(function(s){return s.type===k}).length;
@@ -131,7 +133,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
     var el = document.createElement('article');
     el.className = 'card'; el.dataset.type = s.type; el.dataset.slug = s.slug;
     el.innerHTML =
-      '<button class="shot" type="button" aria-label="Full-page screenshot of '+esc(s.name)+'"><img loading="lazy" alt="" src="thumbnails/'+s.slug+'.jpg">'+
+      '<button class="shot" type="button" aria-label="Full-page screenshot of '+esc(s.name)+'"><img loading="lazy" alt="" src="thumbnails/'+s.slug+'.jpg'+V+'">'+
       '<div class="ph">'+esc(s.url.replace(/^https?:\/\//,'').replace(/\/$/,''))+'<small>Preview not captured yet</small></div></button>'+
       '<div class="body"><div class="head"><h2>'+esc(s.name)+'</h2><span class="kind">'+TYPE[s.type]+'</span></div>'+
       '<div class="status"><i></i><span>Checking…</span></div>'+
@@ -179,7 +181,7 @@ footer{margin:48px 0 0;color:var(--mute);font-size:.88rem}
     lastFocus = document.activeElement;
     document.getElementById('v-title').textContent = s.name;
     document.getElementById('v-live').href = s.url;
-    vBody.innerHTML = '<img alt="Saved home page of '+esc(s.name)+'" src="thumbnails/'+s.slug+'-full.jpg">';
+    vBody.innerHTML = '<img alt="Saved home page of '+esc(s.name)+'" src="thumbnails/'+s.slug+'-full.jpg'+V+'">';
     vBody.querySelector('img').addEventListener('error', function(){
       vBody.innerHTML = '<div class="vempty"><p>No saved copy for '+esc(s.name)+' yet.</p><p>Run <code>python capture.py '+s.slug+'</code> and add the images in the thumbnails folder.</p></div>';
     });
