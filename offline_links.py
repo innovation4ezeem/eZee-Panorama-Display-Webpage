@@ -2,8 +2,9 @@
 Point the links inside the saved property folders at each other instead of eweb247.com,
 so the saved copies can be browsed page to page when the main server is down.
 
-Run it again whenever you add or re-save pages (it only touches links that still point
-at eweb247.com, so running it twice is safe):
+Run it again whenever you add or re-save pages. It only touches links that still point at
+eweb247.com or at the 'not saved' notice (those get relinked once the page is saved), so
+running it twice is safe:
 
     python offline_links.py
 
@@ -20,7 +21,7 @@ stay invisible. The style shows them in their finished state.
 import os, re
 from collections import Counter
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 ROOT = Path(__file__).parent
 FOLDERS = ["Single Properties", "Group Properties"]
@@ -36,6 +37,7 @@ FIX_CSS = (f'<style id={FIX_ID}>'
            '[data-aos]{opacity:1!important;transform:none!important;visibility:visible!important}'
            '</style>')
 CHARSET = re.compile(r"<meta charset=[^>]*>", re.I)
+NOTICE = re.compile(r"^(?:\.\./)*offline-missing\.html#(.+)$")
 
 
 def page_key(name):
@@ -83,6 +85,12 @@ def rewrite(path, sites, stats):
 
     def fix_href(m):
         url = m.group(3) or m.group(4) or m.group(5) or ""
+        noticed = NOTICE.match(url)
+        if noticed:  # sent to the notice on an earlier run; relink if that page has been saved since
+            url = unquote(noticed.group(1))
+            live = LIVE.match(url)
+            if not live or not sites.get(live.group(1).lower(), {}).get(page_key(live.group(2))):
+                return m.group(0)
         live = LIVE.match(url)
         if not live or live.group(1).lower() not in sites or ASSET.search(live.group(2)):
             return m.group(0)
