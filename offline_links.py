@@ -38,6 +38,8 @@ FIX_CSS = (f'<style id={FIX_ID}>'
            '</style>')
 CHARSET = re.compile(r"<meta charset=[^>]*>", re.I)
 NOTICE = re.compile(r"^(?:\.\./)*offline-missing\.html#(.+)$")
+GALLERY_JS = ROOT / "offline-gallery.js"   # inlined: SingleFile's CSP only allows inline scripts
+GALLERY_TAG = re.compile(r"<script id=offline-gallery>.*?</script>", re.S)
 
 
 def page_key(name):
@@ -110,6 +112,14 @@ def rewrite(path, sites, stats):
         at = m.end() if m else 0
         new_text = new_text[:at] + FIX_CSS + new_text[at:]
         stats["styled"] += 1
+    if "gallery" in path.name.lower():
+        viewer = f"<script id=offline-gallery>{GALLERY_JS.read_text(encoding='utf-8')}</script>"
+        if GALLERY_TAG.search(new_text):
+            new_text = GALLERY_TAG.sub(lambda m: viewer, new_text, count=1)
+        else:
+            new_text += viewer
+        if viewer not in text:
+            stats["galleries"] += 1
     if new_text != text:
         path.write_text(new_text, encoding="utf-8", errors="surrogateescape", newline="")
         stats["files"] += 1
@@ -118,12 +128,13 @@ def rewrite(path, sites, stats):
 def main():
     sites = build_index()
     print(f"Found {len(sites)} saved sites: {', '.join(sorted(sites))}")
-    stats = {"files": 0, "linked": 0, "missing": 0, "styled": 0, "missing_pages": Counter()}
+    stats = {"files": 0, "linked": 0, "missing": 0, "styled": 0, "galleries": 0, "missing_pages": Counter()}
     for pages in sites.values():
         for f in sorted(set(pages.values())):
             rewrite(f, sites, stats)
     print(f"Updated {stats['files']} files: {stats['linked']} links now go to saved pages, "
-          f"{stats['missing']} go to the 'not saved' notice, {stats['styled']} pages got the animation fix.")
+          f"{stats['missing']} go to the 'not saved' notice, {stats['styled']} pages got the animation fix, "
+          f"{stats['galleries']} gallery pages got the photo viewer.")
     if stats["missing_pages"]:
         print("\nPages linked to but not saved (save them into the folder and re-run to include):")
         for url, n in sorted(stats["missing_pages"].items()):
