@@ -220,6 +220,25 @@ Reaching out for hotel reservations or stay-related assistance should be simple,
 <script type=application/ld+json>[{"@context":"https://schema.org","@type":"Hotel","name":"Hotel Majash Dreams","image":"https://hotelmajashdreams.in/images/uploads/s_4301/4301_361hotel_majash_dreams__0_.jpg","logo":"https://hotelmajashdreams.in/images/uploads/s_4301/logo/4301_hotel_majash_dreams_logo.png","address":{"@type":"PostalAddress","streetAddress":"B-3/480 Vikalp Khand, Gomati Nagar","addressLocality":"Lucknow","addressRegion":"Uttar Pradesh","postalCode":"226010","addressCountry":"IN"},"telephone":"+91 91199 98888","url":"https://hotelmajashdreams.in","priceRange":"2000","amenityFeature":[{"@type":"LocationFeatureSpecification","name":"Wifi","value":true},{"@type":"LocationFeatureSpecification","name":"Room Service","value":true},{"@type":"LocationFeatureSpecification","name":"Daily Housekeeping","value":true},{"@type":"LocationFeatureSpecification","name":"Parking","value":true},{"@type":"LocationFeatureSpecification","name":"Air Conditioner","value":true},{"@type":"LocationFeatureSpecification","name":"Shower","value":true},{"@type":"LocationFeatureSpecification","name":"Minibar","value":true},{"@type":"LocationFeatureSpecification","name":"Restaurant","value":true},{"@type":"LocationFeatureSpecification","name":"Conference Room","value":true},{"@type":"LocationFeatureSpecification","name":"King Sized Beds","value":true},{"@type":"LocationFeatureSpecification","name":"Wardrobe","value":true},{"@type":"LocationFeatureSpecification","name":"Iron","value":true},{"@type":"LocationFeatureSpecification","name":"HD TV","value":true},{"@type":"LocationFeatureSpecification","name":"On Site Guest Laundry","value":true},{"@type":"LocationFeatureSpecification","name":"In-Room Coffee and Tea","value":true}]},{"@context":"https://schema.org","@type":"LocalBusiness","name":"Hotel Majash Dreams","telephone":"+91 91199 98888","url":"https://hotelmajashdreams.in","logo":"https://hotelmajashdreams.in/images/uploads/s_4301/logo/4301_hotel_majash_dreams_logo.png","address":{"@type":"PostalAddress","streetAddress":"B-3/480 Vikalp Khand, Gomati Nagar","addressLocality":"Lucknow","addressRegion":"Uttar Pradesh","postalCode":"226010","addressCountry":"IN"},"openingHours":"24/7"},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is Check in Check Out Time?","acceptedAnswer":{"@type":"Answer","text":"Check in is at 10 AM, check out is at 12 Noon."}},{"@type":"Question","name":"Do you allow smoking on property? In the rooms?","acceptedAnswer":{"@type":"Answer","text":"Our hotel is entirely non-smoking."}},{"@type":"Question","name":"Do you offer room service? What are the hours?","acceptedAnswer":{"@type":"Answer","text":"Yes, we offer In Room Dining 24 hours a day, with a limited overnight menu."}},{"@type":"Question","name":"Do you have a pool?","acceptedAnswer":{"@type":"Answer","text":"Yes, we have a swimming pool available for guests."}},{"@type":"Question","name":"How do I get to the hotel?","acceptedAnswer":{"@type":"Answer","text":"Please see our Maps + Directions page on Google."}},{"@type":"Question","name":"I booked on a website other than the hotel website and I need to make a change to my reservation. How do I do this?","acceptedAnswer":{"@type":"Answer","text":"In this situation, you would have to contact the customer service department at the website you used to make your reservation."}},{"@type":"Question","name":"Will your rooms allow rollaway beds/cribs/playards? Is there a charge?","acceptedAnswer":{"@type":"Answer","text":"In this situation, you would have to contact the customer service department at the website you used to make your reservation."}},{"@type":"Question","name":"Will your rooms allow rollaway beds/cribs/playards? Is there a charge?","acceptedAnswer":{"@type":"Answer","text":"Some of our rooms can accommodate cribs or rollaway beds. There is a per night rental fee for all rollaway beds."}},{"@type":"Question","name":"Is my ID required at check in?","acceptedAnswer":{"@type":"Answer","text":"We do require presentation of a valid government-issued identification at the time of check-in."}},{"@type":"Question","name":"Can I check in with my debit card?","acceptedAnswer":{"@type":"Answer","text":"We absolutely take debit cards at check-in."}},{"@type":"Question","name":"What forms of payment are accepted to pay for my room?","acceptedAnswer":{"@type":"Answer","text":"All major credit cards are accepted."}}]},{"@context":"https://schema.org","@type":"Product","name":"Deluxe Room","image":"https://hotelmajashdreams.in/images/uploads/s_4301/4301_119hotel_majash_dreams__2_.jpg","description":"Welcome to Hotel Majash Dreams, where comfort meets luxury. Our Deluxe Room offer the perfect blend of style and functionality, ideal for both business and leisure travelers. Each room features modern amenities, including high-speed Wi-Fi, flat-screen TVs, and plush bedding, ensuring a relaxing stay.","sku":"room1","brand":{"@type":"Brand","name":"Hotel Majash Dreams"},"offers":{"@type":"Offer","priceCurrency":"INR","price":"2000","availability":"https://schema.org/InStock","url":"https://live.ipms247.com/booking/roomwisedata.php?hid=hotelmajashdreams&roomtypeunkid=5791900000000000001"}},{"@context":"https://schema.org","@type":"Product","name":"Executive Room","image":"https://hotelmajashdreams.in/images/uploads/s_4301/4301_780hotel_majash_dreams__4_.jpg","description":"Discover the ultimate in relaxation at Hotel Majash Dreams. Our Executive Room offer a tranquil retreat. Each room is equipped with contemporary décor, premium bedding, and essential amenities such as complimentary Wi-Fi, in-room entertainment, and a dedicated workspace.","sku":"room2","brand":{"@type":"Brand","name":"Hotel Majash Dreams"},"offers":{"@type":"Offer","priceCurrency":"INR","price":"2200","availability":"https://schema.org/InStock","url":"https://live.ipms247.com/booking/roomwisedata.php?hid=hotelmajashdreams&roomtypeunkid=5791900000000000002"}}]</script>
 <script id=offline-menu>
 try{(function(){
+/* Put real photos back into SingleFile's de-duplicated images. When the same photo appears
+   more than once, SingleFile stores it once as a CSS variable (--sf-img-N) and turns each
+   <img> into a blank SVG placeholder with that photo as its background. It looks right,
+   but sliders that copy one image's src into another (room photo galleries) then copy the
+   blank placeholder, so the main photo never changes. This runs first on every saved page
+   (offline_links.py) and swaps each placeholder's src back to the photo it stands for. */
+document.querySelectorAll('img[src^="data:image/svg+xml"]').forEach(function (img) {
+  var style = img.getAttribute('style') || '';
+  var v = /background-image:\s*var\((--sf-img-\d+)\)/.exec(style);
+  if (!v) return;
+  var url = /url\(\s*["']?(.*?)["']?\s*\)\s*$/.exec(getComputedStyle(img).getPropertyValue(v[1]).trim());
+  if (!url || !url[1]) return;
+  img.src = url[1];
+  // the photo is now the image itself, so drop the background copy of it
+  img.setAttribute('style', style.replace(/background-[a-z-]+:[^;]*!important;?/g, ''));
+});
+
+})()}catch(e){}
+try{(function(){
 /* Menu script copied from the live staynest site (ezeedemo.com / eweb247.com). Inlined into saved pages by offline_links.py. */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -270,11 +289,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
 })()}catch(e){}
 try{(function(){
-/* Stand-in for Bootstrap's collapse/dropdown toggles, which the older eZee templates
-   (Grand Mahal, Royal, Paradise, Holiday Inn) use for the mobile menu. The saved pages
-   don't include jQuery/Bootstrap, so the hamburger did nothing. Added to every saved page
-   by offline_links.py; it only acts on data-toggle="collapse" / "dropdown" elements. */
+/* Stand-in for Bootstrap's collapse/dropdown toggles and carousels, which the older eZee
+   templates (Grand Mahal, Royal, Paradise, Holiday Inn) use for the mobile menu and photo
+   sliders. The saved pages don't include jQuery/Bootstrap, so the hamburger and the slider
+   arrows did nothing. Added to every saved page by offline_links.py; it only acts on
+   data-toggle="collapse" / "dropdown" and data-slide / data-slide-to elements. */
+
+// Carousels: show slide n of the .carousel the control points at, and update its dots.
+function carouselGo(carousel, to) {
+  var items = carousel.querySelectorAll(':scope > .carousel-inner > .item, :scope > .carousel-inner > .carousel-item');
+  if (!items.length) return;
+  var cur = [].findIndex.call(items, function (i) { return i.classList.contains('active') });
+  var n = to === 'next' ? cur + 1 : to === 'prev' ? cur - 1 : +to;
+  n = (n + items.length) % items.length;
+  items.forEach(function (it, i) { it.classList.toggle('active', i === n); it.classList.remove('next', 'prev', 'left', 'right') });
+  carousel.querySelectorAll('[data-slide-to], [data-bs-slide-to]').forEach(function (dot) {
+    dot.classList.toggle('active', +(dot.getAttribute('data-slide-to') || dot.getAttribute('data-bs-slide-to')) === n);
+  });
+}
+function carouselFor(ctrl) {
+  var sel = ctrl.getAttribute('data-target') || ctrl.getAttribute('data-bs-target') || ctrl.getAttribute('href');
+  var c = sel && sel.charAt(0) === '#' && sel.length > 1 ? document.querySelector(sel) : null;
+  return c || ctrl.closest('.carousel');
+}
+// Auto-advance carousels that ask for it (data-ride / data-interval), pausing on hover.
+document.querySelectorAll('.carousel[data-ride="carousel"], .carousel[data-bs-ride="carousel"], .carousel[data-interval]').forEach(function (c) {
+  var ms = +(c.getAttribute('data-interval') || 5000), hover = false;
+  if (!ms) return;
+  c.addEventListener('mouseenter', function () { hover = true });
+  c.addEventListener('mouseleave', function () { hover = false });
+  setInterval(function () { if (!hover) carouselGo(c, 'next') }, ms);
+});
+
 document.addEventListener('click', function (e) {
+  var slide = e.target.closest && e.target.closest('[data-slide], [data-bs-slide], [data-slide-to], [data-bs-slide-to]');
+  if (slide) {
+    var c = carouselFor(slide);
+    if (c) {
+      e.preventDefault();
+      var to = slide.getAttribute('data-slide') || slide.getAttribute('data-bs-slide');
+      carouselGo(c, to || slide.getAttribute('data-slide-to') || slide.getAttribute('data-bs-slide-to'));
+      return;
+    }
+  }
   var btn = e.target.closest && e.target.closest('[data-toggle="collapse"], [data-bs-toggle="collapse"]');
   if (btn) {
     e.preventDefault();

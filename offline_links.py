@@ -14,8 +14,8 @@ What it does, for every <a href="https://eweb247.com/<site>/<page>"> in
   - the page wasn't saved   -> offline-missing.html, which explains and offers the live link
 Links to other domains (booking engine, maps, social) and to images/files are left alone.
 
-It also adds a mobile-menu script (offline-menus/<site>.js + _bootstrap.js) to every page, since
-the sites' own hamburger scripts aren't saved, and a small <style id=offline-fix> to each page: the sites fade sections in with
+It also adds the sites' own interactive scripts back from offline-scripts/ (mobile menu, room
+photo sliders, Bootstrap stand-in; see SCRIPTS below), since SingleFile doesn't save scripts, and a small <style id=offline-fix> to each page: the sites fade sections in with
 scroll-animation scripts (AOS), which SingleFile doesn't keep, so without it those sections
 stay invisible. The style shows them in their finished state.
 """
@@ -41,13 +41,20 @@ CHARSET = re.compile(r"<meta charset=[^>]*>", re.I)
 NOTICE = re.compile(r"^(?:\.\./)*offline-missing\.html#(.+)$")
 GALLERY_JS = ROOT / "offline-gallery.js"   # inlined: SingleFile's CSP only allows inline scripts
 GALLERY_TAG = re.compile(r"<script id=offline-gallery>.*?</script>", re.S)
-MENUS = ROOT / "offline-menus"             # <site>.js: that site's own mobile-menu script; _bootstrap.js: all pages
+# The sites' own scripts aren't saved, so the interactive bits are re-added from offline-scripts/:
+#   <site>.js                    that site's mobile menu, on every page of the site
+#   <site>.<page>.js / -*.js     scripts for one page, e.g. hotelzara.room-detail.js for room-detail.html
+#   _images.js                   runs first on every page: real photos back into SingleFile's de-duplicated <img>s
+#   _bootstrap.js                stand-in for Bootstrap collapse/dropdown/carousel, on every page
+SCRIPTS = ROOT / "offline-scripts"
 MENU_TAG = re.compile(r"<script id=offline-menu>.*?</script>", re.S)
 
 
-def menu_script(site):
-    """The site's hamburger-menu code plus the Bootstrap stand-in, each isolated so one can't break the other."""
-    parts = [MENUS / f"{site}.js", MENUS / "_bootstrap.js"]
+def menu_script(site, page):
+    """The site's and page's scripts plus the Bootstrap stand-in, each isolated so one can't break another."""
+    stem = Path(page).stem.lower()
+    parts = [SCRIPTS / "_images.js", SCRIPTS / f"{site}.js", SCRIPTS / f"{site}.{stem}.js",
+             *sorted(SCRIPTS.glob(f"{site}.{stem}-*.js")), SCRIPTS / "_bootstrap.js"]
     body = "".join("\ntry{(function(){\n" + f.read_text(encoding="utf-8") + "\n})()}catch(e){}"
                    for f in parts if f.exists())
     return f"<script id=offline-menu>{body}</script>"
@@ -131,7 +138,7 @@ def rewrite(path, sites, stats, site):
             new_text += viewer
         if viewer not in text:
             stats["galleries"] += 1
-    menu = menu_script(site)
+    menu = menu_script(site, path.name)
     new_text = MENU_TAG.sub(lambda m: menu, new_text, count=1) if MENU_TAG.search(new_text) else new_text + menu
     if menu not in text:
         stats["menus"] += 1
@@ -149,7 +156,7 @@ def main():
             rewrite(f, sites, stats, site)
     print(f"Updated {stats['files']} files: {stats['linked']} links now go to saved pages, "
           f"{stats['missing']} go to the 'not saved' notice, {stats['styled']} pages got the animation fix, "
-          f"{stats['galleries']} gallery pages got the photo viewer, {stats['menus']} pages got the mobile-menu script.")
+          f"{stats['galleries']} gallery pages got the photo viewer, {stats['menus']} pages got their menu/slider scripts.")
     if stats["missing_pages"]:
         print("\nPages linked to but not saved (save them into the folder and re-run to include):")
         for url, n in sorted(stats["missing_pages"].items()):
