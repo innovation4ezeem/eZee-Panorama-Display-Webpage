@@ -44,6 +44,7 @@ GALLERY_TAG = re.compile(r"<script id=offline-gallery>.*?</script>", re.S)
 LIGHTBOX = re.compile(r"""<a\b[^>]*\bdata-(?:bs-)?toggle=["']?lightbox""", re.I)  # older templates' photo pop-ups
 # The sites' own scripts aren't saved, so the interactive bits are re-added from offline-scripts/:
 #   <site>.js                    that site's mobile menu, on every page of the site
+#   <site>-*.js                  other scripts for every page of the site, e.g. hotelzara-rooms-slider.js
 #   <site>.<page>.js / -*.js     scripts for one page, e.g. hotelzara.room-detail.js for room-detail.html
 #   _images.js                   runs first on every page: real photos back into SingleFile's de-duplicated <img>s
 #   _bootstrap.js                stand-in for Bootstrap collapse/dropdown/carousel, on every page
@@ -59,7 +60,8 @@ ALIASES = {
 def menu_script(site, page):
     """The site's and page's scripts plus the Bootstrap stand-in, each isolated so one can't break another."""
     stem = Path(page).stem.lower()
-    parts = [SCRIPTS / "_images.js", SCRIPTS / f"{site}.js", SCRIPTS / f"{site}.{stem}.js",
+    parts = [SCRIPTS / "_images.js", SCRIPTS / f"{site}.js", *sorted(SCRIPTS.glob(f"{site}-*.js")),
+             SCRIPTS / f"{site}.{stem}.js",
              *sorted(SCRIPTS.glob(f"{site}.{stem}-*.js")), SCRIPTS / "_bootstrap.js"]
     body = "".join("\ntry{(function(){\n" + f.read_text(encoding="utf-8") + "\n})()}catch(e){}"
                    for f in parts if f.exists())
