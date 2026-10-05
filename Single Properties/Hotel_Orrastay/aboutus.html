@@ -188,7 +188,7 @@ From arrival to departure, guests seek a smooth accommodation journey. Efficient
 <h2>Hotel Stay in Surat Designed for Family and Smart Travel</h2>
 <p>
 Today’s hotel guests compare options based on value, comfort, reviews, and practical benefits rather than just price. A modern stay decision includes convenience, booking confidence, room experience, location advantage, and hospitality quality. This property offers a balanced city stay model for guests seeking meaningful accommodation value in Surat.
-Guests planning travel can learn more about the hotel story on <a href="aboutus.html">About</a>, browse guest support details through <a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html">FAQs</a>, and stay updated with city hospitality insights via <a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html">Blogs</a>.
+Guests planning travel can learn more about the hotel story on <a href="aboutus.html">About</a>, browse guest support details through <a href="faqs.html">FAQs</a>, and stay updated with city hospitality insights via <a href="blogs.html">Blogs</a>.
 </p>
 <ol>
 <li>Easy city movement</li>
@@ -266,8 +266,8 @@ Direct communication improves booking clarity, faster confirmation, and personal
  <li><a href="rooms.html" title="Rooms at Orra Stay, Surat" aria-label="Rooms at Orra Stay located at Surat">Rooms</a></li>
  <li><a href="amenities.html" title="Amenities and facilities at Orra Stay, Surat" aria-label="Amenities and facilities at Orra Stay located at Surat" style=transform:translateX(0px)>Amenities</a></li>
  <li><a href="attractions.html" title="Nearby attractions around Orra Stay at Surat" aria-label="Nearby attractions around Orra Stay located at Surat" style=transform:translateX(0px)>Attractions</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
+ <li><a href="blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
+ <li><a href="faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
  <li><a href="contactus.html" title="Contact Orra Stay at Surat" aria-label="Contact Orra Stay located at Surat">Contact Us</a></li>
  </ul>
  </div>
@@ -394,6 +394,110 @@ document.querySelectorAll('.mobile-nav-link, .mobile-book-btn').forEach(item => 
 });
 
 
+})()}catch(e){}
+try{(function(){
+/* Guest reviews slider (arrows and dots), copied from the live orrastay site: https://ezeedemo.com/orrastay/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.testimonial-slider') && document.querySelector('.testimonial-card'))) return;
+
+class TestimonialSlider {
+    constructor() {
+        this.slider = document.querySelector('.testimonial-slider');
+        this.cards = document.querySelectorAll('.testimonial-card');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+
+        if (!this.slider || this.cards.length === 0) return;
+
+        this.currentIndex = 0;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 4000; // 4 seconds
+
+        this.init();
+    }
+
+    init() {
+        // Button events (safe check)
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => {
+                this.prev();
+                this.restartAutoPlay();
+            });
+        }
+
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => {
+                this.next();
+                this.restartAutoPlay();
+            });
+        }
+
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.goTo(index);
+                this.restartAutoPlay();
+            });
+        });
+
+        // Auto scroll
+        this.startAutoPlay();
+
+        // Pause on hover
+        this.slider.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.slider.addEventListener('mouseleave', () => this.startAutoPlay());
+
+        this.update();
+    }
+
+    update() {
+        this.slider.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+
+    prev() {
+        this.currentIndex =
+            (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+        this.update();
+    }
+
+    next() {
+        this.currentIndex =
+            (this.currentIndex + 1) % this.cards.length;
+        this.update();
+    }
+
+    goTo(index) {
+        this.currentIndex = index;
+        this.update();
+    }
+
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.next();
+        }, this.autoPlayDelay);
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+
+    restartAutoPlay() {
+        this.startAutoPlay();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new TestimonialSlider();
+});
 })()}catch(e){}
 try{(function(){
 /* Stand-in for Bootstrap's collapse/dropdown toggles and carousels, which the older eZee

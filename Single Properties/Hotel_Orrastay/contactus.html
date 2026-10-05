@@ -150,7 +150,7 @@
 <h2>Easy Hotel Contact &amp; Booking at Orra Stay</h2>
 <div class=living-line></div>
 <p>
-Contacting a hotel in Adajan Surat directly gives travelers faster booking clarity, better stay planning, and a more confident reservation experience. Guests searching for hotel booking assistance in Surat, direct room reservation support, or reliable hotel contact details often want immediate answers about room availability, stay preferences, guest services, and check-in convenience before confirming a booking. Direct communication helps families planning city visits, corporate travelers arranging business stays, and group guests organizing accommodation requirements make informed decisions with ease. A responsive hotel support team improves trust by guiding guests through room options, amenities, special requests, and practical stay details based on their travel purpose. Visitors can learn more about the property through the <a href="aboutus.html">About Page</a>, explore accommodation choices on the <a href="rooms.html">All Rooms Page</a>, review comforts via the <a href="amenities.html">Amenities Page</a>, discover city highlights on the <a href="attractions.html">Attractions Page</a>, browse visual experiences in the <a href="gallery.html">Gallery Page</a>, check helpful answers on the <a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html">FAQs Page</a>, and read travel updates on the <a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html">All Blogs</a>. What makes direct hotel contact valuable before booking? It saves time, removes uncertainty, allows personalized assistance, and creates a smoother guest journey from inquiry to check-in—an important factor for travelers choosing quality accommodation in Surat with confidence and convenience.
+Contacting a hotel in Adajan Surat directly gives travelers faster booking clarity, better stay planning, and a more confident reservation experience. Guests searching for hotel booking assistance in Surat, direct room reservation support, or reliable hotel contact details often want immediate answers about room availability, stay preferences, guest services, and check-in convenience before confirming a booking. Direct communication helps families planning city visits, corporate travelers arranging business stays, and group guests organizing accommodation requirements make informed decisions with ease. A responsive hotel support team improves trust by guiding guests through room options, amenities, special requests, and practical stay details based on their travel purpose. Visitors can learn more about the property through the <a href="aboutus.html">About Page</a>, explore accommodation choices on the <a href="rooms.html">All Rooms Page</a>, review comforts via the <a href="amenities.html">Amenities Page</a>, discover city highlights on the <a href="attractions.html">Attractions Page</a>, browse visual experiences in the <a href="gallery.html">Gallery Page</a>, check helpful answers on the <a href="faqs.html">FAQs Page</a>, and read travel updates on the <a href="blogs.html">All Blogs</a>. What makes direct hotel contact valuable before booking? It saves time, removes uncertainty, allows personalized assistance, and creates a smoother guest journey from inquiry to check-in—an important factor for travelers choosing quality accommodation in Surat with confidence and convenience.
 </p>
 </div>
  <section class="contact-grid aos-init" data-aos=fade-up>
@@ -244,8 +244,8 @@ Contacting a hotel in Adajan Surat directly gives travelers faster booking clari
  <li><a href="rooms.html" title="Rooms at Orra Stay, Surat" aria-label="Rooms at Orra Stay located at Surat">Rooms</a></li>
  <li><a href="amenities.html" title="Amenities and facilities at Orra Stay, Surat" aria-label="Amenities and facilities at Orra Stay located at Surat" style=transform:translateX(0px)>Amenities</a></li>
  <li><a href="attractions.html" title="Nearby attractions around Orra Stay at Surat" aria-label="Nearby attractions around Orra Stay located at Surat" style=transform:translateX(0px)>Attractions</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
+ <li><a href="blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
+ <li><a href="faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
  <li><a href="contactus.html" title="Contact Orra Stay at Surat" aria-label="Contact Orra Stay located at Surat">Contact Us</a></li>
  </ul>
  </div>
@@ -372,6 +372,110 @@ document.querySelectorAll('.mobile-nav-link, .mobile-book-btn').forEach(item => 
 });
 
 
+})()}catch(e){}
+try{(function(){
+/* Guest reviews slider (arrows and dots), copied from the live orrastay site: https://ezeedemo.com/orrastay/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.testimonial-slider') && document.querySelector('.testimonial-card'))) return;
+
+class TestimonialSlider {
+    constructor() {
+        this.slider = document.querySelector('.testimonial-slider');
+        this.cards = document.querySelectorAll('.testimonial-card');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+
+        if (!this.slider || this.cards.length === 0) return;
+
+        this.currentIndex = 0;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 4000; // 4 seconds
+
+        this.init();
+    }
+
+    init() {
+        // Button events (safe check)
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => {
+                this.prev();
+                this.restartAutoPlay();
+            });
+        }
+
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => {
+                this.next();
+                this.restartAutoPlay();
+            });
+        }
+
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.goTo(index);
+                this.restartAutoPlay();
+            });
+        });
+
+        // Auto scroll
+        this.startAutoPlay();
+
+        // Pause on hover
+        this.slider.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.slider.addEventListener('mouseleave', () => this.startAutoPlay());
+
+        this.update();
+    }
+
+    update() {
+        this.slider.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+
+    prev() {
+        this.currentIndex =
+            (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+        this.update();
+    }
+
+    next() {
+        this.currentIndex =
+            (this.currentIndex + 1) % this.cards.length;
+        this.update();
+    }
+
+    goTo(index) {
+        this.currentIndex = index;
+        this.update();
+    }
+
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.next();
+        }, this.autoPlayDelay);
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+
+    restartAutoPlay() {
+        this.startAutoPlay();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new TestimonialSlider();
+});
 })()}catch(e){}
 try{(function(){
 /* Stand-in for Bootstrap's collapse/dropdown toggles and carousels, which the older eZee

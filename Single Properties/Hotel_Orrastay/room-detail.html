@@ -216,7 +216,7 @@
  </ol>
  <h2>Family-Friendly Deluxe Room Stay Experience in Surat</h2>
  <p>
- Families selecting accommodation in Surat often search for clean surroundings, reliable hospitality, comfort, and city convenience. A Deluxe Room is a dependable option for family visits, celebration trips, social occasions, and comfortable urban stays. The room category supports a welcoming atmosphere suitable for shared travel plans while allowing guests to enjoy privacy, comfort, and organized accommodation standards. Guests planning longer stays can review helpful travel information through <a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html">All Blogs</a> and practical answers through <a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html">FAQs</a>.
+ Families selecting accommodation in Surat often search for clean surroundings, reliable hospitality, comfort, and city convenience. A Deluxe Room is a dependable option for family visits, celebration trips, social occasions, and comfortable urban stays. The room category supports a welcoming atmosphere suitable for shared travel plans while allowing guests to enjoy privacy, comfort, and organized accommodation standards. Guests planning longer stays can review helpful travel information through <a href="blogs.html">All Blogs</a> and practical answers through <a href="faqs.html">FAQs</a>.
  </p>
  <h3>Comfortable City Accommodation for Couples and Family Guests</h3>
  <p>
@@ -427,8 +427,8 @@ Very decent Deluxe Room stay in Surat. Clean interiors, quick service, and nice 
  <li><a href="rooms.html" title="Rooms at Orra Stay, Surat" aria-label="Rooms at Orra Stay located at Surat">Rooms</a></li>
  <li><a href="amenities.html" title="Amenities and facilities at Orra Stay, Surat" aria-label="Amenities and facilities at Orra Stay located at Surat" style=transform:translateX(0px)>Amenities</a></li>
  <li><a href="attractions.html" title="Nearby attractions around Orra Stay at Surat" aria-label="Nearby attractions around Orra Stay located at Surat" style=transform:translateX(0px)>Attractions</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
+ <li><a href="blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
+ <li><a href="faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
  <li><a href="contactus.html" title="Contact Orra Stay at Surat" aria-label="Contact Orra Stay located at Surat">Contact Us</a></li>
  </ul>
  </div>
@@ -555,6 +555,110 @@ document.querySelectorAll('.mobile-nav-link, .mobile-book-btn').forEach(item => 
 });
 
 
+})()}catch(e){}
+try{(function(){
+/* Guest reviews slider (arrows and dots), copied from the live orrastay site: https://ezeedemo.com/orrastay/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.testimonial-slider') && document.querySelector('.testimonial-card'))) return;
+
+class TestimonialSlider {
+    constructor() {
+        this.slider = document.querySelector('.testimonial-slider');
+        this.cards = document.querySelectorAll('.testimonial-card');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+
+        if (!this.slider || this.cards.length === 0) return;
+
+        this.currentIndex = 0;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 4000; // 4 seconds
+
+        this.init();
+    }
+
+    init() {
+        // Button events (safe check)
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => {
+                this.prev();
+                this.restartAutoPlay();
+            });
+        }
+
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => {
+                this.next();
+                this.restartAutoPlay();
+            });
+        }
+
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.goTo(index);
+                this.restartAutoPlay();
+            });
+        });
+
+        // Auto scroll
+        this.startAutoPlay();
+
+        // Pause on hover
+        this.slider.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.slider.addEventListener('mouseleave', () => this.startAutoPlay());
+
+        this.update();
+    }
+
+    update() {
+        this.slider.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+
+    prev() {
+        this.currentIndex =
+            (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+        this.update();
+    }
+
+    next() {
+        this.currentIndex =
+            (this.currentIndex + 1) % this.cards.length;
+        this.update();
+    }
+
+    goTo(index) {
+        this.currentIndex = index;
+        this.update();
+    }
+
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.next();
+        }, this.autoPlayDelay);
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+
+    restartAutoPlay() {
+        this.startAutoPlay();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new TestimonialSlider();
+});
 })()}catch(e){}
 try{(function(){
 /* room-detail.js from the live orrastay room-detail page. Inlined into the saved room-detail.html by offline_links.py. */
@@ -839,205 +943,6 @@ const ImageSlider = new Slider(
     4000 // auto slide delay (ms)
 
 );
-
-})()}catch(e){}
-try{(function(){
-/* testimonial.js from the live orrastay room-detail page. Inlined into the saved room-detail.html by offline_links.py. */
-class TestimonialSlider {
-
-    constructor() {
-
-        this.slider = document.querySelector('.testimonial-slider');
-
-        this.cards = document.querySelectorAll('.testimonial-card');
-
-        this.dots = document.querySelectorAll('.dot');
-
-        this.prevBtn = document.querySelector('.prev-btn');
-
-        this.nextBtn = document.querySelector('.next-btn');
-
-
-
-        if (!this.slider || this.cards.length === 0) return;
-
-
-
-        this.currentIndex = 0;
-
-        this.autoPlayInterval = null;
-
-        this.autoPlayDelay = 4000; // 4 seconds
-
-
-
-        this.init();
-
-    }
-
-
-
-    init() {
-
-        // Button events (safe check)
-
-        if (this.prevBtn) {
-
-            this.prevBtn.addEventListener('click', () => {
-
-                this.prev();
-
-                this.restartAutoPlay();
-
-            });
-
-        }
-
-
-
-        if (this.nextBtn) {
-
-            this.nextBtn.addEventListener('click', () => {
-
-                this.next();
-
-                this.restartAutoPlay();
-
-            });
-
-        }
-
-
-
-        // Dot navigation
-
-        this.dots.forEach((dot, index) => {
-
-            dot.addEventListener('click', () => {
-
-                this.goTo(index);
-
-                this.restartAutoPlay();
-
-            });
-
-        });
-
-
-
-        // Auto scroll
-
-        this.startAutoPlay();
-
-
-
-        // Pause on hover
-
-        this.slider.addEventListener('mouseenter', () => this.stopAutoPlay());
-
-        this.slider.addEventListener('mouseleave', () => this.startAutoPlay());
-
-
-
-        this.update();
-
-    }
-
-
-
-    update() {
-
-        this.slider.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-
-
-
-        this.dots.forEach((dot, index) => {
-
-            dot.classList.toggle('active', index === this.currentIndex);
-
-        });
-
-    }
-
-
-
-    prev() {
-
-        this.currentIndex =
-
-            (this.currentIndex - 1 + this.cards.length) % this.cards.length;
-
-        this.update();
-
-    }
-
-
-
-    next() {
-
-        this.currentIndex =
-
-            (this.currentIndex + 1) % this.cards.length;
-
-        this.update();
-
-    }
-
-
-
-    goTo(index) {
-
-        this.currentIndex = index;
-
-        this.update();
-
-    }
-
-
-
-    startAutoPlay() {
-
-        this.stopAutoPlay();
-
-        this.autoPlayInterval = setInterval(() => {
-
-            this.next();
-
-        }, this.autoPlayDelay);
-
-    }
-
-
-
-    stopAutoPlay() {
-
-        if (this.autoPlayInterval) {
-
-            clearInterval(this.autoPlayInterval);
-
-            this.autoPlayInterval = null;
-
-        }
-
-    }
-
-
-
-    restartAutoPlay() {
-
-        this.startAutoPlay();
-
-    }
-
-}
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    new TestimonialSlider();
-
-});
 
 })()}catch(e){}
 try{(function(){

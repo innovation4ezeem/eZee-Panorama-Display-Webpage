@@ -153,7 +153,7 @@
  <h2>Hotel Pictures Near Me</h2>
  <div class=living-line></div>
  <p>
-A hotel gallery in Adajan Surat helps travelers make confident booking decisions by offering a genuine visual understanding of the stay experience before arrival. Guests searching for hotel photos in Surat, modern accommodation images, or premium stay visuals often want to see room presentation, interior styling, comfort standards, and guest-focused spaces that reflect real hospitality quality. Visual storytelling builds trust, especially for families planning comfortable city stays, professionals seeking refined business accommodation, and travelers comparing stay options in Surat’s prime urban locations. A thoughtfully presented gallery showcases the atmosphere, design appeal, and practical comfort guests can expect throughout their visit. Travelers can explore the complete stay journey by visiting the <a href="Index.html">Home Page</a>, learning more on the <a href="aboutus.html">About Page</a>, viewing accommodation choices on the <a href="rooms.html">All Rooms Page</a>, reviewing guest comforts on the <a href="amenities.html">Amenities Page</a>, discovering local highlights through the <a href="attractions.html">Attractions Page</a>, finding quick answers on the <a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html">FAQs Page</a>, and connecting directly through the <a href="contactus.html">Contact Us Page</a>. Why do hotel images matter when booking? Clear visuals answer guest expectations instantly by showing ambience, cleanliness, comfort standards, and overall stay quality—making the booking decision easier, faster, and more trustworthy for today’s experience-driven traveler.
+A hotel gallery in Adajan Surat helps travelers make confident booking decisions by offering a genuine visual understanding of the stay experience before arrival. Guests searching for hotel photos in Surat, modern accommodation images, or premium stay visuals often want to see room presentation, interior styling, comfort standards, and guest-focused spaces that reflect real hospitality quality. Visual storytelling builds trust, especially for families planning comfortable city stays, professionals seeking refined business accommodation, and travelers comparing stay options in Surat’s prime urban locations. A thoughtfully presented gallery showcases the atmosphere, design appeal, and practical comfort guests can expect throughout their visit. Travelers can explore the complete stay journey by visiting the <a href="Index.html">Home Page</a>, learning more on the <a href="aboutus.html">About Page</a>, viewing accommodation choices on the <a href="rooms.html">All Rooms Page</a>, reviewing guest comforts on the <a href="amenities.html">Amenities Page</a>, discovering local highlights through the <a href="attractions.html">Attractions Page</a>, finding quick answers on the <a href="faqs.html">FAQs Page</a>, and connecting directly through the <a href="contactus.html">Contact Us Page</a>. Why do hotel images matter when booking? Clear visuals answer guest expectations instantly by showing ambience, cleanliness, comfort standards, and overall stay quality—making the booking decision easier, faster, and more trustworthy for today’s experience-driven traveler.
 </p>
  </div>
  <div class="gallery gallery-1 aos-init" data-aos=fade-up>
@@ -288,8 +288,8 @@ A hotel gallery in Adajan Surat helps travelers make confident booking decisions
  <li><a href="rooms.html" title="Rooms at Orra Stay, Surat" aria-label="Rooms at Orra Stay located at Surat">Rooms</a></li>
  <li><a href="amenities.html" title="Amenities and facilities at Orra Stay, Surat" aria-label="Amenities and facilities at Orra Stay located at Surat" style=transform:translateX(0px)>Amenities</a></li>
  <li><a href="attractions.html" title="Nearby attractions around Orra Stay at Surat" aria-label="Nearby attractions around Orra Stay located at Surat" style=transform:translateX(0px)>Attractions</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
+ <li><a href="blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
+ <li><a href="faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
  <li><a href="contactus.html" title="Contact Orra Stay at Surat" aria-label="Contact Orra Stay located at Surat">Contact Us</a></li>
  </ul>
  </div>
@@ -530,6 +530,110 @@ document.querySelectorAll('.mobile-nav-link, .mobile-book-btn').forEach(item => 
 });
 
 
+})()}catch(e){}
+try{(function(){
+/* Guest reviews slider (arrows and dots), copied from the live orrastay site: https://ezeedemo.com/orrastay/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.testimonial-slider') && document.querySelector('.testimonial-card'))) return;
+
+class TestimonialSlider {
+    constructor() {
+        this.slider = document.querySelector('.testimonial-slider');
+        this.cards = document.querySelectorAll('.testimonial-card');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+
+        if (!this.slider || this.cards.length === 0) return;
+
+        this.currentIndex = 0;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 4000; // 4 seconds
+
+        this.init();
+    }
+
+    init() {
+        // Button events (safe check)
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => {
+                this.prev();
+                this.restartAutoPlay();
+            });
+        }
+
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => {
+                this.next();
+                this.restartAutoPlay();
+            });
+        }
+
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.goTo(index);
+                this.restartAutoPlay();
+            });
+        });
+
+        // Auto scroll
+        this.startAutoPlay();
+
+        // Pause on hover
+        this.slider.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.slider.addEventListener('mouseleave', () => this.startAutoPlay());
+
+        this.update();
+    }
+
+    update() {
+        this.slider.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+
+    prev() {
+        this.currentIndex =
+            (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+        this.update();
+    }
+
+    next() {
+        this.currentIndex =
+            (this.currentIndex + 1) % this.cards.length;
+        this.update();
+    }
+
+    goTo(index) {
+        this.currentIndex = index;
+        this.update();
+    }
+
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.next();
+        }, this.autoPlayDelay);
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+
+    restartAutoPlay() {
+        this.startAutoPlay();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new TestimonialSlider();
+});
 })()}catch(e){}
 try{(function(){
 /* Stand-in for Bootstrap's collapse/dropdown toggles and carousels, which the older eZee

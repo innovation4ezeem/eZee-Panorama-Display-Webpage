@@ -1,5 +1,8 @@
-/* testimonial.js from the live thegoldenvista room-detail page. Inlined into the saved room-detail.html by offline_links.py. */
-const tmnCards = document.querySelectorAll('.tmn-card');
+/* Guest reviews slider (arrows and dots), copied from the live thegoldenvista site: https://ezeedemo.com/goldenvista/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.tmn-card') && document.querySelector('.tmn-next-btn'))) return;
+
+ const tmnCards = document.querySelectorAll('.tmn-card');
   const tmnDots = document.querySelectorAll('.tmn-dot');
   const tmnPrevBtn = document.querySelector('.tmn-prev-btn');
   const tmnNextBtn = document.querySelector('.tmn-next-btn');

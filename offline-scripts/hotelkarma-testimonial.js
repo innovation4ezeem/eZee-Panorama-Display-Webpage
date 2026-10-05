@@ -1,4 +1,7 @@
-/* testimonial.js from the live hotelkarma room-detail page. Inlined into the saved room-detail.html by offline_links.py. */
+/* Guest reviews slider (arrows and dots), copied from the live hotelkarma site: https://ezeedemo.com/karma/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.testimonial-slider') && document.querySelector('.ts-next'))) return;
+
 // document.addEventListener("DOMContentLoaded", function () {
 
 //   const slider = document.querySelector(".testimonial-slider");

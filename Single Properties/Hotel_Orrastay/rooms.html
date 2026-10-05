@@ -150,7 +150,7 @@
  <h2>Affordable Rooms at Orra Stay in Surat, Gujarat</h2>
  <div class=living-line></div>
  <p>
-Finding the right hotel rooms in Adajan Surat matters when comfort, accessibility, and a smooth stay experience are top priorities. Guests searching for family accommodation in Surat, business stay rooms in Adajan, or modern hotel rooms with city convenience often prefer locations that connect easily to commercial hubs, shopping zones, dining spots, and key transport routes. Positioned in one of Surat’s fast-growing urban areas, this stay option suits corporate travelers needing practical overnight comfort, families planning city visits, and guests looking for clean, thoughtfully designed accommodation with dependable hospitality. Whether visiting for business meetings, family functions, short city breaks, or extended stays, travelers can explore the <a href="Index.html">Home Page</a>, understand the property story on the <a href="aboutus.html">About Page</a>, check useful facilities through the <a href="amenities.html">Amenities Page</a>, discover local highlights on the <a href="attractions.html">Attractions Page</a>, browse visuals in the <a href="gallery.html">Gallery Page</a>, review common stay questions on the <a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html">FAQs Page</a>, and connect directly through the <a href="contactus.html">Contact Us Page</a>. Guests today ask: what makes a hotel room worth booking in Surat? The answer is simple—smart location, reliable comfort, modern essentials, seamless access, and a stay experience designed around real traveler needs rather than generic accommodation promises.
+Finding the right hotel rooms in Adajan Surat matters when comfort, accessibility, and a smooth stay experience are top priorities. Guests searching for family accommodation in Surat, business stay rooms in Adajan, or modern hotel rooms with city convenience often prefer locations that connect easily to commercial hubs, shopping zones, dining spots, and key transport routes. Positioned in one of Surat’s fast-growing urban areas, this stay option suits corporate travelers needing practical overnight comfort, families planning city visits, and guests looking for clean, thoughtfully designed accommodation with dependable hospitality. Whether visiting for business meetings, family functions, short city breaks, or extended stays, travelers can explore the <a href="Index.html">Home Page</a>, understand the property story on the <a href="aboutus.html">About Page</a>, check useful facilities through the <a href="amenities.html">Amenities Page</a>, discover local highlights on the <a href="attractions.html">Attractions Page</a>, browse visuals in the <a href="gallery.html">Gallery Page</a>, review common stay questions on the <a href="faqs.html">FAQs Page</a>, and connect directly through the <a href="contactus.html">Contact Us Page</a>. Guests today ask: what makes a hotel room worth booking in Surat? The answer is simple—smart location, reliable comfort, modern essentials, seamless access, and a stay experience designed around real traveler needs rather than generic accommodation promises.
 </p>
  </div>
  
@@ -210,8 +210,8 @@ Book Now
  <li><a href="rooms.html" title="Rooms at Orra Stay, Surat" aria-label="Rooms at Orra Stay located at Surat">Rooms</a></li>
  <li><a href="amenities.html" title="Amenities and facilities at Orra Stay, Surat" aria-label="Amenities and facilities at Orra Stay located at Surat" style=transform:translateX(0px)>Amenities</a></li>
  <li><a href="attractions.html" title="Nearby attractions around Orra Stay at Surat" aria-label="Nearby attractions around Orra Stay located at Surat" style=transform:translateX(0px)>Attractions</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
+ <li><a href="blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
+ <li><a href="faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
  <li><a href="contactus.html" title="Contact Orra Stay at Surat" aria-label="Contact Orra Stay located at Surat">Contact Us</a></li>
  </ul>
  </div>
@@ -338,6 +338,110 @@ document.querySelectorAll('.mobile-nav-link, .mobile-book-btn').forEach(item => 
 });
 
 
+})()}catch(e){}
+try{(function(){
+/* Guest reviews slider (arrows and dots), copied from the live orrastay site: https://ezeedemo.com/orrastay/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.testimonial-slider') && document.querySelector('.testimonial-card'))) return;
+
+class TestimonialSlider {
+    constructor() {
+        this.slider = document.querySelector('.testimonial-slider');
+        this.cards = document.querySelectorAll('.testimonial-card');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+
+        if (!this.slider || this.cards.length === 0) return;
+
+        this.currentIndex = 0;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 4000; // 4 seconds
+
+        this.init();
+    }
+
+    init() {
+        // Button events (safe check)
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => {
+                this.prev();
+                this.restartAutoPlay();
+            });
+        }
+
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => {
+                this.next();
+                this.restartAutoPlay();
+            });
+        }
+
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.goTo(index);
+                this.restartAutoPlay();
+            });
+        });
+
+        // Auto scroll
+        this.startAutoPlay();
+
+        // Pause on hover
+        this.slider.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.slider.addEventListener('mouseleave', () => this.startAutoPlay());
+
+        this.update();
+    }
+
+    update() {
+        this.slider.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+
+    prev() {
+        this.currentIndex =
+            (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+        this.update();
+    }
+
+    next() {
+        this.currentIndex =
+            (this.currentIndex + 1) % this.cards.length;
+        this.update();
+    }
+
+    goTo(index) {
+        this.currentIndex = index;
+        this.update();
+    }
+
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.next();
+        }, this.autoPlayDelay);
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+
+    restartAutoPlay() {
+        this.startAutoPlay();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new TestimonialSlider();
+});
 })()}catch(e){}
 try{(function(){
 /* Stand-in for Bootstrap's collapse/dropdown toggles and carousels, which the older eZee

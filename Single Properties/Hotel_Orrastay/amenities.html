@@ -150,7 +150,7 @@
 <h2>Modern Amenities at Orra Stay Near Surat, Gujarat</h2>
 <div class=living-line></div>
 <p>
-Hotel amenities in Adajan Surat play a major role in how travelers choose accommodation, especially when booking for business visits, family trips, or comfortable city stays. Guests today search for hotels with modern facilities in Surat that deliver convenience, cleanliness, dependable service, and a seamless guest experience under one roof. A well-equipped hotel offers more than just a room—it supports productivity for corporate travelers, comfort for families, and practical convenience for guests planning short or extended stays in the city. From thoughtfully maintained spaces to essential in-room comforts and guest-friendly hospitality standards, travelers increasingly value accommodation that matches real expectations rather than generic promises. Visitors can discover the hotel’s story on the <a href="aboutus.html">About Page</a>, explore room choices on the <a href="rooms.html">All Rooms Page</a>, browse city highlights through the <a href="attractions.html">Attractions Page</a>, view the property experience on the <a href="gallery.html">Gallery Page</a>, find quick answers on the <a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html">FAQs Page</a>, read travel insights on the <a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html">All Blogs</a>, and connect directly through the <a href="contactus.html">Contact Us Page</a>. What do guests value most while booking hotels in Surat? The answer is clear—modern hotel facilities, dependable comfort, practical services, convenient city access, and a stay environment designed to support relaxation, work, and effortless travel planning in one of Surat’s most preferred urban locations.
+Hotel amenities in Adajan Surat play a major role in how travelers choose accommodation, especially when booking for business visits, family trips, or comfortable city stays. Guests today search for hotels with modern facilities in Surat that deliver convenience, cleanliness, dependable service, and a seamless guest experience under one roof. A well-equipped hotel offers more than just a room—it supports productivity for corporate travelers, comfort for families, and practical convenience for guests planning short or extended stays in the city. From thoughtfully maintained spaces to essential in-room comforts and guest-friendly hospitality standards, travelers increasingly value accommodation that matches real expectations rather than generic promises. Visitors can discover the hotel’s story on the <a href="aboutus.html">About Page</a>, explore room choices on the <a href="rooms.html">All Rooms Page</a>, browse city highlights through the <a href="attractions.html">Attractions Page</a>, view the property experience on the <a href="gallery.html">Gallery Page</a>, find quick answers on the <a href="faqs.html">FAQs Page</a>, read travel insights on the <a href="blogs.html">All Blogs</a>, and connect directly through the <a href="contactus.html">Contact Us Page</a>. What do guests value most while booking hotels in Surat? The answer is clear—modern hotel facilities, dependable comfort, practical services, convenient city access, and a stay environment designed to support relaxation, work, and effortless travel planning in one of Surat’s most preferred urban locations.
 </p>
 </div>
  <div class="amenities-grid aos-init" data-aos=fade-up data-aos-delay=300>
@@ -295,8 +295,8 @@ You can review complete amenities by visiting the official rooms.html page befor
  <li><a href="rooms.html" title="Rooms at Orra Stay, Surat" aria-label="Rooms at Orra Stay located at Surat">Rooms</a></li>
  <li><a href="amenities.html" title="Amenities and facilities at Orra Stay, Surat" aria-label="Amenities and facilities at Orra Stay located at Surat" style=transform:translateX(0px)>Amenities</a></li>
  <li><a href="attractions.html" title="Nearby attractions around Orra Stay at Surat" aria-label="Nearby attractions around Orra Stay located at Surat" style=transform:translateX(0px)>Attractions</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
- <li><a href="../../offline-missing.html#https://eweb247.com/orrastay/faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
+ <li><a href="blogs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">Blogs</a></li>
+ <li><a href="faqs.html" title="Frequently asked questions about Orra Stay at Surat" aria-label="FAQs about Orra Stay located at Surat">FAQs</a></li>
  <li><a href="contactus.html" title="Contact Orra Stay at Surat" aria-label="Contact Orra Stay located at Surat">Contact Us</a></li>
  </ul>
  </div>
@@ -423,6 +423,110 @@ document.querySelectorAll('.mobile-nav-link, .mobile-book-btn').forEach(item => 
 });
 
 
+})()}catch(e){}
+try{(function(){
+/* Guest reviews slider (arrows and dots), copied from the live orrastay site: https://ezeedemo.com/orrastay/testimonial.js
+   Inlined into every page of the site by offline_links.py; only runs where the reviews slider is. */
+if (!(document.querySelector('.testimonial-slider') && document.querySelector('.testimonial-card'))) return;
+
+class TestimonialSlider {
+    constructor() {
+        this.slider = document.querySelector('.testimonial-slider');
+        this.cards = document.querySelectorAll('.testimonial-card');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+
+        if (!this.slider || this.cards.length === 0) return;
+
+        this.currentIndex = 0;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 4000; // 4 seconds
+
+        this.init();
+    }
+
+    init() {
+        // Button events (safe check)
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => {
+                this.prev();
+                this.restartAutoPlay();
+            });
+        }
+
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => {
+                this.next();
+                this.restartAutoPlay();
+            });
+        }
+
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.goTo(index);
+                this.restartAutoPlay();
+            });
+        });
+
+        // Auto scroll
+        this.startAutoPlay();
+
+        // Pause on hover
+        this.slider.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.slider.addEventListener('mouseleave', () => this.startAutoPlay());
+
+        this.update();
+    }
+
+    update() {
+        this.slider.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentIndex);
+        });
+    }
+
+    prev() {
+        this.currentIndex =
+            (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+        this.update();
+    }
+
+    next() {
+        this.currentIndex =
+            (this.currentIndex + 1) % this.cards.length;
+        this.update();
+    }
+
+    goTo(index) {
+        this.currentIndex = index;
+        this.update();
+    }
+
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => {
+            this.next();
+        }, this.autoPlayDelay);
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+
+    restartAutoPlay() {
+        this.startAutoPlay();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new TestimonialSlider();
+});
 })()}catch(e){}
 try{(function(){
 /* Stand-in for Bootstrap's collapse/dropdown toggles and carousels, which the older eZee
