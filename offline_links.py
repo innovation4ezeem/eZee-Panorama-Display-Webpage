@@ -41,6 +41,7 @@ CHARSET = re.compile(r"<meta charset=[^>]*>", re.I)
 NOTICE = re.compile(r"^(?:\.\./)*offline-missing\.html#(.+)$")
 GALLERY_JS = ROOT / "offline-gallery.js"   # inlined: SingleFile's CSP only allows inline scripts
 GALLERY_TAG = re.compile(r"<script id=offline-gallery>.*?</script>", re.S)
+LIGHTBOX = re.compile(r"""<a\b[^>]*\bdata-(?:bs-)?toggle=["']?lightbox""", re.I)  # older templates' photo pop-ups
 # The sites' own scripts aren't saved, so the interactive bits are re-added from offline-scripts/:
 #   <site>.js                    that site's mobile menu, on every page of the site
 #   <site>.<page>.js / -*.js     scripts for one page, e.g. hotelzara.room-detail.js for room-detail.html
@@ -130,7 +131,7 @@ def rewrite(path, sites, stats, site):
         at = m.end() if m else 0
         new_text = new_text[:at] + FIX_CSS + new_text[at:]
         stats["styled"] += 1
-    if "gallery" in path.name.lower():
+    if "gallery" in path.name.lower() or LIGHTBOX.search(new_text):
         viewer = f"<script id=offline-gallery>{GALLERY_JS.read_text(encoding='utf-8')}</script>"
         if GALLERY_TAG.search(new_text):
             new_text = GALLERY_TAG.sub(lambda m: viewer, new_text, count=1)
@@ -156,7 +157,7 @@ def main():
             rewrite(f, sites, stats, site)
     print(f"Updated {stats['files']} files: {stats['linked']} links now go to saved pages, "
           f"{stats['missing']} go to the 'not saved' notice, {stats['styled']} pages got the animation fix, "
-          f"{stats['galleries']} gallery pages got the photo viewer, {stats['menus']} pages got their menu/slider scripts.")
+          f"{stats['galleries']} pages got the photo viewer, {stats['menus']} pages got their menu/slider scripts.")
     if stats["missing_pages"]:
         print("\nPages linked to but not saved (save them into the folder and re-run to include):")
         for url, n in sorted(stats["missing_pages"].items()):
