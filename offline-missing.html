@@ -32,8 +32,23 @@ code{word-break:break-all;font-size:.85rem}
     <a class="btn" href="index.html">All properties</a>
   </div>
 </div>
+<script src="sites.js"></script>
 <script>
   var u = decodeURIComponent(location.hash.slice(1));
+  // A browser can keep showing an older saved page whose link still points here after the
+  // page has been added. If the saved copy now exists, open it instead of this notice.
+  (function () {
+    var m = /^https?:\/\/(?:www\.)?eweb247\.com\/([^\/?#]+)\/([^?#]+\.html?)/i.exec(u);
+    if (!m || !window.SITES || !window.fetch || location.protocol === 'file:') return;
+    var site = window.SITES.filter(function (s) {
+      return s.url.replace(/\/+$/, '').split('/').pop().toLowerCase() === m[1].toLowerCase();
+    })[0];
+    if (!site) return;
+    var page = site.offline.replace(/[^\/]*$/, '') + m[2];
+    fetch(encodeURI(page), { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+      if (r.ok) location.replace(encodeURI(page) + '?v=' + Date.now());
+    }).catch(function () {});
+  })();
   if (/^https:\/\/(www\.)?eweb247\.com\//i.test(u)) {
     document.getElementById('url').textContent = u;
     document.getElementById('live').href = u;
