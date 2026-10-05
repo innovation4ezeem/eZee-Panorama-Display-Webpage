@@ -49,6 +49,11 @@ LIGHTBOX = re.compile(r"""<a\b[^>]*\bdata-(?:bs-)?toggle=["']?lightbox""", re.I)
 #   _bootstrap.js                stand-in for Bootstrap collapse/dropdown/carousel, on every page
 SCRIPTS = ROOT / "offline-scripts"
 MENU_TAG = re.compile(r"<script id=offline-menu>.*?</script>", re.S)
+# Live pages that have no saved copy but whose content is a section of a saved page:
+#   {site: {page key: (saved page key, "#section id")}}
+ALIASES = {
+    "holidayinn": {"hotel": ("index", "#features20"), "hotels": ("index", "#features20")},  # "Our Hotels"
+}
 
 
 def menu_script(site, page):
@@ -110,15 +115,20 @@ def rewrite(path, sites, stats, site):
         if noticed:  # sent to the notice on an earlier run; relink if that page has been saved since
             url = unquote(noticed.group(1))
             live = LIVE.match(url)
-            if not live or not sites.get(live.group(1).lower(), {}).get(page_key(live.group(2))):
+            key = live and (live.group(1).lower(), page_key(live.group(2)))
+            if not live or not (sites.get(key[0], {}).get(key[1]) or ALIASES.get(key[0], {}).get(key[1])):
                 return m.group(0)
         live = LIVE.match(url)
         if not live or live.group(1).lower() not in sites or ASSET.search(live.group(2)):
             return m.group(0)
-        target = sites[live.group(1).lower()].get(page_key(live.group(2)))
+        site_pages, key = sites[live.group(1).lower()], page_key(live.group(2))
+        target, fragment = site_pages.get(key), live.group(3) or ""
+        alias = ALIASES.get(live.group(1).lower(), {}).get(key)
+        if not target and alias and site_pages.get(alias[0]):
+            target, fragment = site_pages[alias[0]], alias[1]
         if target:
             stats["linked"] += 1
-            new = rel_url(target, path) + (live.group(3) or "")
+            new = rel_url(target, path) + fragment
         else:
             stats["missing"] += 1
             stats["missing_pages"][url.lower()] += 1
