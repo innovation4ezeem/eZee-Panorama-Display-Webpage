@@ -373,10 +373,10 @@ const toggle = document.querySelector('.nav-toggle');
 })()}catch(e){}
 try{(function(){
 /* Stand-in for Bootstrap's collapse/dropdown toggles and carousels, which the older eZee
-   templates (Grand Mahal, Royal, Paradise, Holiday Inn) use for the mobile menu and photo
-   sliders. The saved pages don't include jQuery/Bootstrap, so the hamburger and the slider
+   templates (Grand Mahal, Royal, Paradise, Holiday Inn) use for the mobile menu, photo
+   sliders and tabbed galleries (Exterior / Interior / Rooms). The saved pages don't include jQuery/Bootstrap, so the hamburger and the slider
    arrows did nothing. Added to every saved page by offline_links.py; it only acts on
-   data-toggle="collapse" / "dropdown" and data-slide / data-slide-to elements. */
+   data-toggle="collapse" / "dropdown" / "tab" / "pill" and data-slide / data-slide-to elements. */
 
 // Carousels: show slide n of the .carousel the control points at, and update its dots.
 function carouselGo(carousel, to) {
@@ -404,7 +404,33 @@ document.querySelectorAll('.carousel[data-ride="carousel"], .carousel[data-bs-ri
   setInterval(function () { if (!hover) carouselGo(c, 'next') }, ms);
 });
 
+// Tabs: mark the clicked tab active and show its pane, hiding the pane's siblings.
+function tabShow(tab) {
+  var sel = tab.getAttribute('data-target') || tab.getAttribute('data-bs-target') || tab.getAttribute('href');
+  var pane = sel && sel.charAt(0) === '#' && sel.length > 1 ? document.getElementById(sel.slice(1)) : null;
+  if (!pane) return false;
+  var list = tab.closest('[role="tablist"], .nav, ul') || tab.parentElement;
+  list.querySelectorAll('[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"]').forEach(function (t) {
+    var on = t === tab;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on);
+    if (t.parentElement.tagName === 'LI') t.parentElement.classList.toggle('active', on);
+  });
+  [].forEach.call(pane.parentElement.children, function (p) {
+    if (p.classList.contains('tab-pane')) p.classList.remove('active', 'in', 'show');
+  });
+  pane.classList.add('active', 'in', 'show');
+  return true;
+}
+// A link like page.html#tab-2 opens that tab, as on the live site.
+if (location.hash.length > 1) {
+  var hashTab = document.querySelector('[data-toggle="tab"][href="' + location.hash + '"], [data-bs-toggle="tab"][href="' + location.hash + '"]');
+  if (hashTab) tabShow(hashTab);
+}
+
 document.addEventListener('click', function (e) {
+  var tab = e.target.closest && e.target.closest('[data-toggle="tab"], [data-bs-toggle="tab"], [data-toggle="pill"], [data-bs-toggle="pill"]');
+  if (tab && tabShow(tab)) { e.preventDefault(); return; }
   var slide = e.target.closest && e.target.closest('[data-slide], [data-bs-slide], [data-slide-to], [data-bs-slide-to]');
   if (slide) {
     var c = carouselFor(slide);
